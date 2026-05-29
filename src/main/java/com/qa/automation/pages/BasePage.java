@@ -1,6 +1,10 @@
 package com.qa.automation.pages;
 
+import com.aventstack.extentreports.ExtentTest;
+import com.aventstack.extentreports.Status;
 import com.qa.automation.helpers.AssertionHelper;
+import com.qa.automation.helpers.ScreenshotUtils;
+import com.qa.automation.reports.ExtentReportManager;
 import com.qa.automation.utils.JavaScriptUtils;
 import com.qa.automation.utils.WaitUtils;
 import org.openqa.selenium.By;
@@ -8,7 +12,6 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.WebDriverWait;
-import org.openqa.selenium.support.ui.ExpectedConditions;
 
 import java.time.Duration;
 
@@ -118,5 +121,52 @@ public class BasePage {
 
     protected void assertContains(String text, String substring, String message) {
         AssertionHelper.assertContains(text, substring, message);
+    }
+
+    // ─── Report Logging ───────────────────────────────────────────────────────────
+
+    protected void logStep(String message) {
+        System.out.println(message);
+        ExtentTest test = ExtentReportManager.getTest();
+        if (test != null) {
+            test.log(Status.PASS, message);
+        }
+    }
+
+    protected void logInfo(String message) {
+        System.out.println(message);
+        ExtentTest test = ExtentReportManager.getTest();
+        if (test != null) {
+            test.info(message);
+        }
+    }
+
+    protected void logFail(String message) {
+        System.out.println("✗ " + message);
+        ExtentTest test = ExtentReportManager.getTest();
+        if (test != null) {
+            test.log(Status.FAIL, message);
+        }
+    }
+
+    // ─── Screenshot Helpers ───────────────────────────────────────────────────────
+
+    protected void takeStepScreenshot(String screenshotLabel) {
+        ExtentTest test = ExtentReportManager.getTest();
+        if (test == null) return;
+
+        try {
+            // Wait briefly for UI to fully render before capturing
+            Thread.sleep(500);
+
+            // Only embed in report — do NOT save to file
+            String base64 = ScreenshotUtils.getScreenshotBase64(driver);
+            if (base64 != null) {
+                test.addScreenCaptureFromBase64String(base64, screenshotLabel);
+                System.out.println("📸 Screenshot captured: " + screenshotLabel);
+            }
+        } catch (Exception e) {
+            System.err.println("✗ Failed to take step screenshot: " + e.getMessage());
+        }
     }
 }

@@ -1,16 +1,21 @@
 package com.qa.automation.tests;
 
+import com.aventstack.extentreports.ExtentTest;
+import com.aventstack.extentreports.Status;
+import com.qa.automation.helpers.ScreenshotUtils;
 import com.qa.automation.listeners.TestListener;
 import com.qa.automation.pages.CartPage;
 import com.qa.automation.pages.LoginPage;
 import com.qa.automation.pages.ProductCatalogPage;
 import com.qa.automation.pages.ProductDetailPage;
+import com.qa.automation.reports.ExtentReportManager;
 import com.qa.automation.utils.ConfigReader;
 import com.qa.automation.utils.DriverManager;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInfo;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.openqa.selenium.WebDriver;
 
@@ -50,10 +55,42 @@ public class CartHappyPathTest {
     }
 
     @AfterEach
-    public void tearDown() {
+    public void tearDown(TestInfo testInfo) {
         System.out.println("\n========== CLEANUP ==========");
+
+        if (driver != null) {
+            // Embed final screenshot in report
+            String base64 = ScreenshotUtils.getScreenshotBase64(driver);
+            if (base64 != null) {
+                ExtentTest test = ExtentReportManager.getTest();
+                if (test != null) {
+                    test.addScreenCaptureFromBase64String(base64, "Final Screenshot");
+                    System.out.println("✓ Final screenshot embedded in report");
+                }
+            }
+
+            // Save ONE file to disk — named by test result
+            boolean testPassed = testInfo.getDisplayName() != null
+                    && !testInfo.getTags().isEmpty();
+            ScreenshotUtils.takeScreenshot(driver,
+                    "FINAL_" + testInfo.getDisplayName().replace("()", ""));
+        }
+
         DriverManager.quitDriver();
         System.out.println("✓ Browser closed");
+
+        ExtentReportManager.flush();
+        System.out.println("✓ Report saved");
+    }
+
+    // ─── Helper ──────────────────────────────────────────────────────────────────
+
+    private void logStep(String message) {
+        System.out.println(message);
+        ExtentTest test = ExtentReportManager.getTest();
+        if (test != null) {
+            test.log(Status.PASS, message);
+        }
     }
 
     // ─── Test Cases ──────────────────────────────────────────────────────────────
@@ -62,38 +99,38 @@ public class CartHappyPathTest {
     @Tag("smoke")
     @Tag("cart")
     public void testAddProductToCart() {
-        System.out.println("\n========== TC-CART-001: Add Product to Cart ==========");
+        logStep("========== TC-CART-001: Add Product to Cart ==========");
 
-        System.out.println("Step 1: Verify product catalog loaded...");
+        logStep("Step 1: Verify product catalog loaded...");
         catalogPage.verifyCatalogLoaded();
 
-        System.out.println("Step 2: Click product '" + ConfigReader.getProductName() + "'...");
+        logStep("Step 2: Click product '" + ConfigReader.getProductName() + "'...");
         catalogPage.clickProduct();
 
-        System.out.println("Step 2.5: Verify product detail page opens with full information...");
+        logStep("Step 3: Verify product detail page opens with full information...");
         detailPage.verifyProductDetails();
 
-        System.out.println("Step 3: Set quantity to " + ConfigReader.getProductQuantity() + "...");
+        logStep("Step 4: Set quantity to " + ConfigReader.getProductQuantity() + "...");
         detailPage.incrementQuantity();
 
-        System.out.println("Step 3.5: Verify quantity field updates to show '" + ConfigReader.getProductQuantity() + "'...");
+        logStep("Step 5: Verify quantity field updates to show '" + ConfigReader.getProductQuantity() + "'...");
         detailPage.verifyQuantityUpdated();
 
-        System.out.println("Step 4: Click Add to Cart...");
+        logStep("Step 6: Click Add to Cart...");
         detailPage.clickAddToCart();
 
-        System.out.println("Step 5: Verify success modal appears...");
+        logStep("Step 7: Verify success modal appears...");
         assertTrue(cartPage.isSuccessModalDisplayed(),
                 "Success modal should be displayed after adding to cart");
-        System.out.println("✓ Success modal displayed");
+        logStep("✓ Success modal displayed");
 
-        System.out.println("Step 6: Click Shopping Cart button in modal...");
+        logStep("Step 8: Click Shopping Cart button in modal...");
         cartPage.clickShoppingCart();
-        System.out.println("✓ Navigated to shopping cart");
+        logStep("✓ Navigated to shopping cart");
 
-        System.out.println("Step 7: Verify cart displays added product with correct details...");
+        logStep("Step 9: Verify cart displays added product with correct details...");
         cartPage.verifyCartContents();
 
-        System.out.println("\n========== TC-CART-001 PASSED ✓ ==========");
+        logStep("========== TC-CART-001 PASSED ✓ ==========");
     }
 }

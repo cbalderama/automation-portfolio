@@ -4,7 +4,6 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
-import org.openqa.selenium.support.ui.ExpectedConditions;
 
 public class ProductDetailPage extends BasePage {
 
@@ -43,62 +42,67 @@ public class ProductDetailPage extends BasePage {
     // ─── Actions ─────────────────────────────────────────────────────────────────
 
     public void verifyProductDetails() {
-        System.out.println("Verifying product detail page...");
+        logStep("Verifying product detail page...");
 
         assertTrue(isElementDisplayed(productTitle), "Product title should be displayed");
-        System.out.println("✓ Product Title: " + getJsText(productTitle));
+        logStep("✓ Product Title: " + getJsText(productTitle));
 
         assertTrue(isElementDisplayed(productPrice), "Product price should be displayed");
-        System.out.println("✓ Product Price: " + getJsText(productPrice));
+        logStep("✓ Product Price: " + getJsText(productPrice));
 
         assertTrue(isElementDisplayed(productRating), "Product rating should be displayed");
-        System.out.println("✓ Product Rating: " + getJsText(productRating));
+        logStep("✓ Product Rating: " + getJsText(productRating));
 
         assertTrue(isElementDisplayed(descriptionSection), "Description section should be displayed");
-        System.out.println("✓ Description section visible");
+        logStep("✓ Description section visible");
 
         assertTrue(isElementDisplayed(detailsSection), "Details section should be displayed");
-        System.out.println("✓ Details section visible");
+        logStep("✓ Details section visible");
 
-        System.out.println("✓ Full product information confirmed");
+        logStep("✓ Full product information confirmed");
+
+        // 📸 Checkpoint 2 — Product detail page loaded
+        takeStepScreenshot("02_Product_Detail_Page");
     }
 
     public void verifyDefaultQuantity() {
         waitForVisibility(quantityDisplay);
         String quantity = getJsText(quantityDisplay);
         assertTrue(quantity.equals("1"), "Default quantity should be 1, but got: " + quantity);
-        System.out.println("✓ Default quantity confirmed: 1");
+        logStep("✓ Default quantity confirmed: 1");
     }
 
     public void incrementQuantity() {
         waitForVisibility(quantityDisplay);
         String beforeQty = getJsText(quantityDisplay);
-        System.out.println("DEBUG: Quantity before click = '" + beforeQty + "'");
+        logInfo("Quantity before click = '" + beforeQty + "'");
 
         waitForClickable(increaseQtyBtn);
         jsClick(increaseQtyBtn);
-        System.out.println("DEBUG: Clicked plus button via JS");
+        logInfo("Clicked plus button via JS");
 
         // Wait for quantity to update to 2
-        wait.until(ExpectedConditions.attributeContains(
+        waitForAttributeContains(
                 By.xpath("//*[@data-testid='quantity-display']"),
                 "textContent", "2"
-        ));
+        );
 
         String afterQty = getJsText(quantityDisplay);
-        System.out.println("DEBUG: Quantity after click = '" + afterQty + "'");
+        logStep("✓ Quantity updated to: " + afterQty);
+
+        // 📸 Checkpoint 3 — After quantity update
+        takeStepScreenshot("03_Quantity_Updated");
     }
 
     public void verifyQuantityUpdated() {
         String quantity = getJsText(quantityDisplay);
-        System.out.println("DEBUG: Quantity text = '" + quantity + "'");
         assertTrue(quantity.equals("2"), "Quantity should be 2, but got: " + quantity);
-        System.out.println("✓ Quantity verified: 2");
+        logStep("✓ Quantity verified: " + quantity);
     }
 
     public void clickAddToCart() {
         waitForClickable(addToCartButton);
         jsClick(addToCartButton);
-        System.out.println("✓ Clicked Add to Cart");
+        logStep("✓ Clicked Add to Cart");
     }
 }

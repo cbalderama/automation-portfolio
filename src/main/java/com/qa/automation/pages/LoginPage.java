@@ -3,7 +3,6 @@ package com.qa.automation.pages;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
-import org.openqa.selenium.support.ui.ExpectedConditions;
 
 public class LoginPage extends BasePage {
 
@@ -30,25 +29,34 @@ public class LoginPage extends BasePage {
     // ─── Actions ─────────────────────────────────────────────────────────────────
 
     public void enterEmail(String email) {
+        waitForVisibility(emailInput);
         type(emailInput, email);
+        logInfo("Entered email: " + email);
     }
 
     public void enterPassword(String password) {
+        waitForVisibility(passwordInput);
         type(passwordInput, password);
+        logInfo("Entered password: ********");
     }
 
     public void clickLogin() {
+        waitForClickable(loginButton);
         click(loginButton);
+        logInfo("Clicked Login button");
     }
 
     public void login(String email, String password) {
-        System.out.println("Logging in as: " + email);
+        logStep("Logging in as: " + email);
         enterEmail(email);
         enterPassword(password);
         clickLogin();
 
         // Wait for catalog screen to confirm login succeeded
-        wait.until(ExpectedConditions.visibilityOf(catalogScreen));
-        System.out.println("✓ Login successful — catalog screen loaded");
+        waitForVisibility(catalogScreen);
+        logStep("✓ Login successful — catalog screen loaded");
+
+        // 📸 Checkpoint 1 — After login
+        takeStepScreenshot("01_After_Login");
     }
 }

@@ -48,6 +48,10 @@ public class CartPage extends BasePage {
     public boolean isSuccessModalDisplayed() {
         try {
             waitForVisibility(successModalTitle);
+
+            // 📸 Checkpoint 4 — Success modal appeared
+            takeStepScreenshot("04_Success_Modal");
+
             return isElementDisplayed(successModalTitle)
                     && isElementDisplayed(successModalMessage);
         } catch (Exception e) {
@@ -58,19 +62,19 @@ public class CartPage extends BasePage {
     public void clickShoppingCart() {
         waitForClickable(modalGoToCart);
         click(modalGoToCart);
-        System.out.println("✓ Clicked Navigate to Shopping Cart button");
+        logStep("✓ Clicked Navigate to Shopping Cart button");
     }
 
     public void clickContinueShopping() {
         waitForClickable(modalContinueShopping);
         click(modalContinueShopping);
-        System.out.println("✓ Clicked Continue Shopping button");
+        logStep("✓ Clicked Continue Shopping button");
     }
 
     public void verifyCartLoaded() {
         waitForVisibility(cartScreen);
         assertTrue(isElementDisplayed(cartScreen), "Cart screen should be displayed");
-        System.out.println("✓ Cart screen loaded");
+        logStep("✓ Cart screen loaded");
     }
 
     public void verifyCartIsEmpty() {
@@ -79,11 +83,11 @@ public class CartPage extends BasePage {
         String emptyTitle = getJsText(cartEmptyTitle);
         assertEquals("Your cart is empty", emptyTitle,
                 "Empty cart title should be 'Your cart is empty' but got: '" + emptyTitle + "'");
-        System.out.println("✓ Cart is empty — verified");
+        logStep("✓ Cart is empty — verified");
     }
 
     public void verifyCartContents() {
-        System.out.println("Verifying cart contents...");
+        logStep("Verifying cart contents...");
 
         // Wait for cart screen
         waitForPresence(By.xpath("//*[@data-testid='cart-screen']"));
@@ -95,7 +99,7 @@ public class CartPage extends BasePage {
         String actualProductName = getJsText(cartProductName);
         assertEquals(ConfigReader.getProductName(), actualProductName,
                 "Product name should be '" + ConfigReader.getProductName() + "' but got: '" + actualProductName + "'");
-        System.out.println("✓ Product Name: " + actualProductName);
+        logStep("✓ Product Name: " + actualProductName);
 
         // Quantity
         WebElement cartQuantity = waitForPresence(
@@ -104,7 +108,7 @@ public class CartPage extends BasePage {
         String actualQuantity = getJsText(cartQuantity);
         assertEquals(ConfigReader.getProductQuantity(), actualQuantity,
                 "Quantity should be '" + ConfigReader.getProductQuantity() + "' but got: '" + actualQuantity + "'");
-        System.out.println("✓ Quantity: " + actualQuantity);
+        logStep("✓ Quantity: " + actualQuantity);
 
         // Unit Price
         WebElement cartUnitPrice = waitForPresence(
@@ -113,7 +117,7 @@ public class CartPage extends BasePage {
         String actualUnitPrice = getJsText(cartUnitPrice);
         assertEquals(ConfigReader.getProductPrice(), actualUnitPrice,
                 "Unit price should be '" + ConfigReader.getProductPrice() + "' but got: '" + actualUnitPrice + "'");
-        System.out.println("✓ Unit Price: " + actualUnitPrice);
+        logStep("✓ Unit Price: " + actualUnitPrice);
 
         // Subtotal
         WebElement cartSubtotal = waitForPresence(
@@ -122,7 +126,7 @@ public class CartPage extends BasePage {
         String actualSubtotal = getJsText(cartSubtotal);
         assertEquals(ConfigReader.getProductSubtotal(), actualSubtotal,
                 "Subtotal should be '" + ConfigReader.getProductSubtotal() + "' but got: '" + actualSubtotal + "'");
-        System.out.println("✓ Subtotal: " + actualSubtotal);
+        logStep("✓ Subtotal: " + actualSubtotal);
 
         // Cart Total
         WebElement cartTotalElement = waitForPresence(
@@ -131,14 +135,17 @@ public class CartPage extends BasePage {
         String actualTotal = getJsText(cartTotalElement);
         assertEquals(ConfigReader.getCartTotal(), actualTotal,
                 "Cart total should be '" + ConfigReader.getCartTotal() + "' but got: '" + actualTotal + "'");
-        System.out.println("✓ Cart Total: " + actualTotal);
+        logStep("✓ Cart Total: " + actualTotal);
 
-        System.out.println("✓ Cart contents verified");
+        logStep("✓ Cart contents verified");
+
+        // 📸 Checkpoint 5 — Cart contents verified
+        takeStepScreenshot("05_Cart_Contents_Verified");
     }
 
     public void clickCheckout() {
         waitForClickable(checkoutButton);
         click(checkoutButton);
-        System.out.println("✓ Clicked Proceed to Checkout");
+        logStep("✓ Clicked Proceed to Checkout");
     }
 }

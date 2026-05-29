@@ -2,12 +2,8 @@ package com.qa.automation.listeners;
 
 import com.aventstack.extentreports.ExtentTest;
 import com.aventstack.extentreports.Status;
-import com.qa.automation.helpers.ScreenshotUtils;
 import com.qa.automation.reports.ExtentReportManager;
-import com.qa.automation.utils.DriverManager;
 import org.junit.jupiter.api.extension.*;
-
-import java.io.File;
 
 public class TestListener implements
         BeforeEachCallback,
@@ -36,7 +32,8 @@ public class TestListener implements
 
     @Override
     public void afterEach(ExtensionContext context) {
-        ExtentReportManager.flush();
+        // Report is flushed in CartHappyPathTest @AfterEach
+        // after screenshot is taken
     }
 
     // ─── Test Watcher — Pass ─────────────────────────────────────────────────────
@@ -45,24 +42,6 @@ public class TestListener implements
     public void testSuccessful(ExtensionContext context) {
         ExtentTest test = ExtentReportManager.getTest();
         if (test == null) return;
-
-        // Take pass screenshot
-        String screenshotPath = ScreenshotUtils.takePassScreenshot(
-                DriverManager.getDriver(),
-                context.getDisplayName()
-        );
-
-        if (screenshotPath != null) {
-            try {
-                test.addScreenCaptureFromPath(
-                        new File(screenshotPath).getAbsolutePath(),
-                        "Pass Screenshot"
-                );
-            } catch (Exception e) {
-                System.err.println("Could not attach pass screenshot: " + e.getMessage());
-            }
-        }
-
         test.log(Status.PASS, "✓ Test passed: " + context.getDisplayName());
         System.out.println("✓ Test marked as PASS in report");
     }
@@ -73,24 +52,6 @@ public class TestListener implements
     public void testFailed(ExtensionContext context, Throwable cause) {
         ExtentTest test = ExtentReportManager.getTest();
         if (test == null) return;
-
-        // Take failure screenshot
-        String screenshotPath = ScreenshotUtils.takeFailureScreenshot(
-                DriverManager.getDriver(),
-                context.getDisplayName()
-        );
-
-        if (screenshotPath != null) {
-            try {
-                test.addScreenCaptureFromPath(
-                        new File(screenshotPath).getAbsolutePath(),
-                        "Failure Screenshot"
-                );
-            } catch (Exception e) {
-                System.err.println("Could not attach failure screenshot: " + e.getMessage());
-            }
-        }
-
         test.log(Status.FAIL, "✗ Test failed: " + cause.getMessage());
         test.log(Status.FAIL, "Stack trace: " + cause.toString());
         System.out.println("✗ Test marked as FAIL in report");
@@ -102,18 +63,14 @@ public class TestListener implements
     public void testDisabled(ExtensionContext context, java.util.Optional<String> reason) {
         ExtentTest test = ExtentReportManager.getTest();
         if (test == null) return;
-
         test.log(Status.SKIP, "Test skipped: " + reason.orElse("No reason provided"));
-        System.out.println("⚠ Test marked as SKIP in report");
     }
 
     @Override
     public void testAborted(ExtensionContext context, Throwable cause) {
         ExtentTest test = ExtentReportManager.getTest();
         if (test == null) return;
-
         test.log(Status.SKIP, "Test aborted: " + cause.getMessage());
-        System.out.println("⚠ Test marked as ABORTED in report");
     }
 
     // ─── Helpers ─────────────────────────────────────────────────────────────────
