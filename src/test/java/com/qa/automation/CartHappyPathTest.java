@@ -4,6 +4,7 @@ import com.qa.automation.pages.CartPage;
 import com.qa.automation.pages.LoginPage;
 import com.qa.automation.pages.ProductCatalogPage;
 import com.qa.automation.pages.ProductDetailPage;
+import com.qa.automation.utils.ConfigReader;
 import com.qa.automation.utils.DriverManager;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -27,11 +28,11 @@ public class CartHappyPathTest {
     public void setUp() {
         System.out.println("========== TEST SETUP ==========");
 
-        driver = DriverManager.initializeDriver("chrome");
+        driver = DriverManager.initializeDriver(ConfigReader.getBrowser());
         System.out.println("✓ WebDriver initialized");
 
-        driver.get("http://localhost:8081");
-        System.out.println("✓ Navigated to application");
+        driver.get(ConfigReader.getAppUrl());
+        System.out.println("✓ Navigated to: " + ConfigReader.getAppUrl());
 
         loginPage = new LoginPage(driver);
         catalogPage = new ProductCatalogPage(driver);
@@ -39,7 +40,10 @@ public class CartHappyPathTest {
         cartPage = new CartPage(driver);
         System.out.println("✓ Page objects initialized");
 
-        loginPage.login("test@email.com", "password");
+        loginPage.login(
+                ConfigReader.getTestEmail(),
+                ConfigReader.getTestPassword()
+        );
     }
 
     @AfterEach
@@ -60,16 +64,16 @@ public class CartHappyPathTest {
         System.out.println("Step 1: Verify product catalog loaded...");
         catalogPage.verifyCatalogLoaded();
 
-        System.out.println("Step 2: Click product 'Lenovo ThinkPad X1 Carbon'...");
+        System.out.println("Step 2: Click product '" + ConfigReader.getProductName() + "'...");
         catalogPage.clickProduct();
 
         System.out.println("Step 2.5: Verify product detail page opens with full information...");
         detailPage.verifyProductDetails();
 
-        System.out.println("Step 3: Set quantity to 2...");
+        System.out.println("Step 3: Set quantity to " + ConfigReader.getProductQuantity() + "...");
         detailPage.incrementQuantity();
 
-        System.out.println("Step 3.5: Verify quantity field updates to show '2'...");
+        System.out.println("Step 3.5: Verify quantity field updates to show '" + ConfigReader.getProductQuantity() + "'...");
         detailPage.verifyQuantityUpdated();
 
         System.out.println("Step 4: Click Add to Cart...");

@@ -1,10 +1,10 @@
 package com.qa.automation.pages;
 
+import com.qa.automation.utils.ConfigReader;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
-import org.openqa.selenium.support.ui.ExpectedConditions;
 
 public class CartPage extends BasePage {
 
@@ -93,8 +93,8 @@ public class CartPage extends BasePage {
                 By.xpath("//*[@data-testid='cart-item-lenovo-thinkpad-x1-carbon-name']")
         );
         String actualProductName = getJsText(cartProductName);
-        assertEquals("Lenovo ThinkPad X1 Carbon", actualProductName,
-                "Product name should be 'Lenovo ThinkPad X1 Carbon' but got: '" + actualProductName + "'");
+        assertEquals(ConfigReader.getProductName(), actualProductName,
+                "Product name should be '" + ConfigReader.getProductName() + "' but got: '" + actualProductName + "'");
         System.out.println("✓ Product Name: " + actualProductName);
 
         // Quantity
@@ -102,8 +102,8 @@ public class CartPage extends BasePage {
                 By.xpath("//*[@data-testid='cart-item-lenovo-thinkpad-x1-carbon-qty']")
         );
         String actualQuantity = getJsText(cartQuantity);
-        assertEquals("2", actualQuantity,
-                "Quantity should be '2' but got: '" + actualQuantity + "'");
+        assertEquals(ConfigReader.getProductQuantity(), actualQuantity,
+                "Quantity should be '" + ConfigReader.getProductQuantity() + "' but got: '" + actualQuantity + "'");
         System.out.println("✓ Quantity: " + actualQuantity);
 
         // Unit Price
@@ -111,8 +111,8 @@ public class CartPage extends BasePage {
                 By.xpath("//*[@data-testid='cart-item-lenovo-thinkpad-x1-carbon-price']")
         );
         String actualUnitPrice = getJsText(cartUnitPrice);
-        assertEquals("$1599.00", actualUnitPrice,
-                "Unit price should be '$1599.00' but got: '" + actualUnitPrice + "'");
+        assertEquals(ConfigReader.getProductPrice(), actualUnitPrice,
+                "Unit price should be '" + ConfigReader.getProductPrice() + "' but got: '" + actualUnitPrice + "'");
         System.out.println("✓ Unit Price: " + actualUnitPrice);
 
         // Subtotal
@@ -120,8 +120,8 @@ public class CartPage extends BasePage {
                 By.xpath("//*[@data-testid='cart-item-lenovo-thinkpad-x1-carbon-subtotal']")
         );
         String actualSubtotal = getJsText(cartSubtotal);
-        assertEquals("$3198.00", actualSubtotal,
-                "Subtotal should be '$3198.00' but got: '" + actualSubtotal + "'");
+        assertEquals(ConfigReader.getProductSubtotal(), actualSubtotal,
+                "Subtotal should be '" + ConfigReader.getProductSubtotal() + "' but got: '" + actualSubtotal + "'");
         System.out.println("✓ Subtotal: " + actualSubtotal);
 
         // Cart Total
@@ -129,8 +129,8 @@ public class CartPage extends BasePage {
                 By.xpath("//*[@data-testid='cart-total']")
         );
         String actualTotal = getJsText(cartTotalElement);
-        assertEquals("$3198.00", actualTotal,
-                "Cart total should be '$3198.00' but got: '" + actualTotal + "'");
+        assertEquals(ConfigReader.getCartTotal(), actualTotal,
+                "Cart total should be '" + ConfigReader.getCartTotal() + "' but got: '" + actualTotal + "'");
         System.out.println("✓ Cart Total: " + actualTotal);
 
         System.out.println("✓ Cart contents verified");
@@ -140,19 +140,5 @@ public class CartPage extends BasePage {
         waitForClickable(checkoutButton);
         click(checkoutButton);
         System.out.println("✓ Clicked Proceed to Checkout");
-    }
-
-    // ─── Helpers ─────────────────────────────────────────────────────────────────
-
-    private void assertTrue(boolean condition, String message) {
-        if (!condition) {
-            throw new AssertionError(message);
-        }
-    }
-
-    private void assertEquals(String expected, String actual, String message) {
-        if (!expected.equals(actual)) {
-            throw new AssertionError(message);
-        }
     }
 }

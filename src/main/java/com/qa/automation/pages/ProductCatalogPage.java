@@ -73,12 +73,4 @@ public class ProductCatalogPage extends BasePage {
         click(lenovoProductCard);
         System.out.println("✓ Clicked Lenovo ThinkPad X1 Carbon");
     }
-
-    // ─── Helpers ─────────────────────────────────────────────────────────────────
-
-    private void assertTrue(boolean condition, String message) {
-        if (!condition) {
-            throw new AssertionError(message);
-        }
-    }
 }

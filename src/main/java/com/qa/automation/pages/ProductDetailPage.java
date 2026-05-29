@@ -101,12 +101,4 @@ public class ProductDetailPage extends BasePage {
         jsClick(addToCartButton);
         System.out.println("✓ Clicked Add to Cart");
     }
-
-    // ─── Helpers ─────────────────────────────────────────────────────────────────
-
-    private void assertTrue(boolean condition, String message) {
-        if (!condition) {
-            throw new AssertionError(message);
-        }
-    }
 }

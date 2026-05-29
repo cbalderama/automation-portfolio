@@ -1,12 +1,14 @@
 package com.qa.automation.pages;
 
+import com.qa.automation.helpers.AssertionHelper;
+import com.qa.automation.utils.JavaScriptUtils;
+import com.qa.automation.utils.WaitUtils;
 import org.openqa.selenium.By;
-import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.PageFactory;
-import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 
 import java.time.Duration;
 
@@ -14,31 +16,33 @@ public class BasePage {
 
     protected WebDriver driver;
     protected WebDriverWait wait;
-    protected JavascriptExecutor js;
+    protected WaitUtils waitUtils;
+    protected JavaScriptUtils jsUtils;
 
     // ─── Constructor ─────────────────────────────────────────────────────────────
 
     public BasePage(WebDriver driver) {
         this.driver = driver;
         this.wait = new WebDriverWait(driver, Duration.ofSeconds(10));
-        this.js = (JavascriptExecutor) driver;
+        this.waitUtils = new WaitUtils(driver);
+        this.jsUtils = new JavaScriptUtils(driver);
         PageFactory.initElements(driver, this);
     }
 
     // ─── Core Interactions ────────────────────────────────────────────────────────
 
     protected void click(WebElement element) {
-        wait.until(ExpectedConditions.elementToBeClickable(element));
+        waitUtils.forClickable(element);
         element.click();
     }
 
     protected void jsClick(WebElement element) {
-        wait.until(ExpectedConditions.elementToBeClickable(element));
-        js.executeScript("arguments[0].click();", element);
+        waitUtils.forClickable(element);
+        jsUtils.click(element);
     }
 
     protected void type(WebElement element, String text) {
-        wait.until(ExpectedConditions.visibilityOf(element));
+        waitUtils.forVisibility(element);
         element.clear();
         element.sendKeys(text);
     }
@@ -50,8 +54,7 @@ public class BasePage {
     }
 
     protected String getJsText(WebElement element) {
-        return ((String) js.executeScript(
-                "return arguments[0].textContent;", element)).trim();
+        return jsUtils.getText(element);
     }
 
     // ─── Visibility Checks ────────────────────────────────────────────────────────
@@ -76,22 +79,44 @@ public class BasePage {
     // ─── Wait Helpers ─────────────────────────────────────────────────────────────
 
     protected WebElement waitForVisibility(WebElement element) {
-        return wait.until(ExpectedConditions.visibilityOf(element));
+        return waitUtils.forVisibility(element);
     }
 
     protected WebElement waitForPresence(By locator) {
-        return wait.until(ExpectedConditions.presenceOfElementLocated(locator));
+        return waitUtils.forPresence(locator);
     }
 
     protected WebElement waitForClickable(WebElement element) {
-        return wait.until(ExpectedConditions.elementToBeClickable(element));
+        return waitUtils.forClickable(element);
     }
 
     protected void waitForTextPresent(By locator, String text) {
-        wait.until(ExpectedConditions.textToBePresentInElementLocated(locator, text));
+        waitUtils.forTextPresent(locator, text);
     }
 
     protected void waitForUrlContains(String urlFragment) {
-        wait.until(ExpectedConditions.urlContains(urlFragment));
+        waitUtils.forUrlContains(urlFragment);
+    }
+
+    protected void waitForAttributeContains(By locator, String attribute, String value) {
+        waitUtils.forAttributeContains(locator, attribute, value);
+    }
+
+    // ─── Assertion Helpers ────────────────────────────────────────────────────────
+
+    protected void assertTrue(boolean condition, String message) {
+        AssertionHelper.assertTrue(condition, message);
+    }
+
+    protected void assertEquals(String expected, String actual, String message) {
+        AssertionHelper.assertEquals(expected, actual, message);
+    }
+
+    protected void assertNotEmpty(String text, String message) {
+        AssertionHelper.assertNotEmpty(text, message);
+    }
+
+    protected void assertContains(String text, String substring, String message) {
+        AssertionHelper.assertContains(text, substring, message);
     }
 }
