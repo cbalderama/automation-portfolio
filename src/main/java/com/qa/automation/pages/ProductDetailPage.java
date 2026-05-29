@@ -1,7 +1,6 @@
 package com.qa.automation.pages;
 
 import org.openqa.selenium.By;
-import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -9,26 +8,33 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 
 public class ProductDetailPage extends BasePage {
 
-    @FindBy(xpath = "//div[contains(@class, 'r-color-1khnkhu r-fontSize-1x35g6') and contains(text(), 'Lenovo ThinkPad X1 Carbon')]")
+    // ─── Locators — all using data-testid ────────────────────────────────────────
+
+    @FindBy(xpath = "//*[@data-testid='product-name']")
     private WebElement productTitle;
 
-    @FindBy(xpath = "//div[contains(@class, 'r-color-126xxis r-fontSize-1ui5ee8') and contains(text(), '$')]")
+    @FindBy(xpath = "//*[@data-testid='product-price']")
     private WebElement productPrice;
 
-    @FindBy(xpath = "//div[contains(@class, 'r-color-1khnkhu r-fontSize-ubezar r-fontWeight-1kfrs79 r-marginRight-1d4mawv')]")
+    @FindBy(xpath = "//*[@data-testid='product-rating']")
     private WebElement productRating;
 
-    @FindBy(xpath = "//div[contains(text(), 'Description')]")
+    @FindBy(xpath = "//*[@data-testid='description-section']")
     private WebElement descriptionSection;
 
-    @FindBy(xpath = "//div[contains(text(), 'Details')]")
+    @FindBy(xpath = "//*[@data-testid='details-section']")
     private WebElement detailsSection;
 
-    @FindBy(xpath = "//div[contains(@class, 'r-color-1khnkhu r-fontSize-1i10wst r-fontWeight-1kfrs79 r-marginInline-1xpp3t0')]")
+    @FindBy(xpath = "//*[@data-testid='quantity-display']")
     private WebElement quantityDisplay;
 
-    @FindBy(xpath = "//div[contains(text(), 'Add to Cart')]")
+    @FindBy(xpath = "//*[@data-testid='increase-qty-btn']")
+    private WebElement increaseQtyBtn;
+
+    @FindBy(xpath = "//*[@data-testid='add-to-cart-btn']")
     private WebElement addToCartButton;
+
+    // ─── Constructor ─────────────────────────────────────────────────────────────
 
     public ProductDetailPage(WebDriver driver) {
         super(driver);
@@ -40,13 +46,13 @@ public class ProductDetailPage extends BasePage {
         System.out.println("Verifying product detail page...");
 
         assertTrue(isElementDisplayed(productTitle), "Product title should be displayed");
-        System.out.println("✓ Product Title: " + getText(productTitle));
+        System.out.println("✓ Product Title: " + getJsText(productTitle));
 
         assertTrue(isElementDisplayed(productPrice), "Product price should be displayed");
-        System.out.println("✓ Product Price: " + getText(productPrice));
+        System.out.println("✓ Product Price: " + getJsText(productPrice));
 
         assertTrue(isElementDisplayed(productRating), "Product rating should be displayed");
-        System.out.println("✓ Product Rating: " + getText(productRating));
+        System.out.println("✓ Product Rating: " + getJsText(productRating));
 
         assertTrue(isElementDisplayed(descriptionSection), "Description section should be displayed");
         System.out.println("✓ Description section visible");
@@ -57,40 +63,42 @@ public class ProductDetailPage extends BasePage {
         System.out.println("✓ Full product information confirmed");
     }
 
-    public void incrementQuantity() {
-        JavascriptExecutor js = (JavascriptExecutor) driver;
+    public void verifyDefaultQuantity() {
+        waitForVisibility(quantityDisplay);
+        String quantity = getJsText(quantityDisplay);
+        assertTrue(quantity.equals("1"), "Default quantity should be 1, but got: " + quantity);
+        System.out.println("✓ Default quantity confirmed: 1");
+    }
 
-        // Wait for quantity display to be visible first
-        wait.until(ExpectedConditions.visibilityOf(quantityDisplay));
-        String beforeQty = getText(quantityDisplay);
+    public void incrementQuantity() {
+        waitForVisibility(quantityDisplay);
+        String beforeQty = getJsText(quantityDisplay);
         System.out.println("DEBUG: Quantity before click = '" + beforeQty + "'");
 
-        // Find the plus button and click ONCE (1 → 2)
-        WebElement plusButton = wait.until(ExpectedConditions.elementToBeClickable(
-                By.xpath("(//div[contains(@class, 'r-backgroundColor-cb25cm')]//div[@tabindex='0'])[last()]")
-        ));
-
-        js.executeScript("arguments[0].click();", plusButton);
+        waitForClickable(increaseQtyBtn);
+        jsClick(increaseQtyBtn);
         System.out.println("DEBUG: Clicked plus button via JS");
 
-        try { Thread.sleep(800); } catch (InterruptedException e) { e.printStackTrace(); }
+        // Wait for quantity to update to 2
+        wait.until(ExpectedConditions.attributeContains(
+                By.xpath("//*[@data-testid='quantity-display']"),
+                "textContent", "2"
+        ));
 
-        String afterQty = getText(quantityDisplay);
+        String afterQty = getJsText(quantityDisplay);
         System.out.println("DEBUG: Quantity after click = '" + afterQty + "'");
     }
 
     public void verifyQuantityUpdated() {
-        try { Thread.sleep(500); } catch (InterruptedException e) { e.printStackTrace(); }
-
-        String quantity = getText(quantityDisplay);
+        String quantity = getJsText(quantityDisplay);
         System.out.println("DEBUG: Quantity text = '" + quantity + "'");
         assertTrue(quantity.equals("2"), "Quantity should be 2, but got: " + quantity);
-        System.out.println("✓ Quantity verified: " + quantity);
+        System.out.println("✓ Quantity verified: 2");
     }
 
     public void clickAddToCart() {
-        wait.until(ExpectedConditions.elementToBeClickable(addToCartButton));
-        click(addToCartButton);
+        waitForClickable(addToCartButton);
+        jsClick(addToCartButton);
         System.out.println("✓ Clicked Add to Cart");
     }
 

@@ -1,13 +1,4 @@
 -------------------------------------------------------------------------------
 Test set: com.qa.automation.tests.CartHappyPathTest
 -------------------------------------------------------------------------------
-Tests run: 1, Failures: 1, Errors: 0, Skipped: 0, Time elapsed: 108.5 s <<< FAILURE! -- in com.qa.automation.tests.CartHappyPathTest
-com.qa.automation.tests.CartHappyPathTest.testAddProductToCart -- Time elapsed: 19.77 s <<< FAILURE!
-java.lang.AssertionError: Product name should be 'Lenovo ThinkPad X1 Carbon' but got: ''
-	at com.qa.automation.pages.CartPage.assertEquals(CartPage.java:98)
-	at com.qa.automation.pages.CartPage.verifyCartContents(CartPage.java:54)
-	at com.qa.automation.tests.CartHappyPathTest.testAddProductToCart(CartHappyPathTest.java:80)
-	at java.base/java.lang.reflect.Method.invoke(Method.java:569)
-	at java.base/java.util.ArrayList.forEach(ArrayList.java:1511)
-	at java.base/java.util.ArrayList.forEach(ArrayList.java:1511)
-
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 24.45 s -- in com.qa.automation.tests.CartHappyPathTest
