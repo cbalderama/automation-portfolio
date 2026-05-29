@@ -1,0 +1,6 @@
+com\qa\automation\pages\ProductCatalogPage.class
+com\qa\automation\utils\DriverManager.class
+com\qa\automation\pages\BasePage.class
+com\qa\automation\pages\CartPage.class
+com\qa\automation\pages\LoginPage.class
+com\qa\automation\pages\ProductDetailPage.class
