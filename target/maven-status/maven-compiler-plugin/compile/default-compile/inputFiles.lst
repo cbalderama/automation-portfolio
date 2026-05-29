@@ -1,10 +1,12 @@
 C:\Users\Alder\Documents\Intellij Projects\CartAutomation\cart-automation\src\main\java\com\qa\automation\helpers\AssertionHelper.java
 C:\Users\Alder\Documents\Intellij Projects\CartAutomation\cart-automation\src\main\java\com\qa\automation\helpers\ConfigReader.java
+C:\Users\Alder\Documents\Intellij Projects\CartAutomation\cart-automation\src\main\java\com\qa\automation\helpers\ScreenshotUtils.java
 C:\Users\Alder\Documents\Intellij Projects\CartAutomation\cart-automation\src\main\java\com\qa\automation\pages\BasePage.java
 C:\Users\Alder\Documents\Intellij Projects\CartAutomation\cart-automation\src\main\java\com\qa\automation\pages\CartPage.java
 C:\Users\Alder\Documents\Intellij Projects\CartAutomation\cart-automation\src\main\java\com\qa\automation\pages\LoginPage.java
 C:\Users\Alder\Documents\Intellij Projects\CartAutomation\cart-automation\src\main\java\com\qa\automation\pages\ProductCatalogPage.java
 C:\Users\Alder\Documents\Intellij Projects\CartAutomation\cart-automation\src\main\java\com\qa\automation\pages\ProductDetailPage.java
+C:\Users\Alder\Documents\Intellij Projects\CartAutomation\cart-automation\src\main\java\com\qa\automation\reports\ExtentReportManager.java
 C:\Users\Alder\Documents\Intellij Projects\CartAutomation\cart-automation\src\main\java\com\qa\automation\utils\DriverManager.java
 C:\Users\Alder\Documents\Intellij Projects\CartAutomation\cart-automation\src\main\java\com\qa\automation\utils\JavaScriptUtils.java
 C:\Users\Alder\Documents\Intellij Projects\CartAutomation\cart-automation\src\main\java\com\qa\automation\utils\WaitUtils.java

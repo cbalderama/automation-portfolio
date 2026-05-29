@@ -1,10 +1,12 @@
 com\qa\automation\utils\DriverManager.class
 com\qa\automation\helpers\AssertionHelper.class
-com\qa\automation\pages\LoginPage.class
 com\qa\automation\pages\ProductDetailPage.class
+com\qa\automation\utils\WaitUtils.class
+com\qa\automation\helpers\ScreenshotUtils.class
+com\qa\automation\pages\LoginPage.class
 com\qa\automation\utils\JavaScriptUtils.class
 com\qa\automation\pages\ProductCatalogPage.class
+com\qa\automation\reports\ExtentReportManager.class
 com\qa\automation\pages\BasePage.class
 com\qa\automation\pages\CartPage.class
 com\qa\automation\utils\ConfigReader.class
-com\qa\automation\utils\WaitUtils.class

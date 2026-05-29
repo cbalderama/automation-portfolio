@@ -1,5 +1,6 @@
 package com.qa.automation.tests;
 
+import com.qa.automation.listeners.TestListener;
 import com.qa.automation.pages.CartPage;
 import com.qa.automation.pages.LoginPage;
 import com.qa.automation.pages.ProductCatalogPage;
@@ -10,10 +11,12 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.openqa.selenium.WebDriver;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+@ExtendWith(TestListener.class)
 public class CartHappyPathTest {
 
     private WebDriver driver;
