@@ -1,6 +1,6 @@
 package com.qa.automation.pages;
 
-import com.qa.automation.utils.ConfigReader;
+import com.qa.automation.helpers.TestDataReader;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -50,7 +50,7 @@ public class CartPage extends BasePage {
             waitForVisibility(successModalTitle);
 
             // 📸 Checkpoint 4 — Success modal appeared
-            takeStepScreenshot("04_Success_Modal");
+            takeStepScreenshot("05_Success_Modal");
 
             return isElementDisplayed(successModalTitle)
                     && isElementDisplayed(successModalMessage);
@@ -92,55 +92,63 @@ public class CartPage extends BasePage {
         // Wait for cart screen
         waitForPresence(By.xpath("//*[@data-testid='cart-screen']"));
 
+        // Build dynamic testIDs from product name
+        String expectedName = TestDataReader.getProductName();
+        String itemTestId = expectedName.toLowerCase().replace(" ", "-");
+
         // Product Name
         WebElement cartProductName = waitForPresence(
-                By.xpath("//*[@data-testid='cart-item-lenovo-thinkpad-x1-carbon-name']")
+                By.xpath("//*[@data-testid='cart-item-" + itemTestId + "-name']")
         );
         String actualProductName = getJsText(cartProductName);
-        assertEquals(ConfigReader.getProductName(), actualProductName,
-                "Product name should be '" + ConfigReader.getProductName() + "' but got: '" + actualProductName + "'");
+        assertEquals(expectedName, actualProductName,
+                "Product name should be '" + expectedName + "' but got: '" + actualProductName + "'");
         logStep("✓ Product Name: " + actualProductName);
 
         // Quantity
+        String expectedQty = TestDataReader.getProductQuantity();
         WebElement cartQuantity = waitForPresence(
-                By.xpath("//*[@data-testid='cart-item-lenovo-thinkpad-x1-carbon-qty']")
+                By.xpath("//*[@data-testid='cart-item-" + itemTestId + "-qty']")
         );
         String actualQuantity = getJsText(cartQuantity);
-        assertEquals(ConfigReader.getProductQuantity(), actualQuantity,
-                "Quantity should be '" + ConfigReader.getProductQuantity() + "' but got: '" + actualQuantity + "'");
+        assertEquals(expectedQty, actualQuantity,
+                "Quantity should be '" + expectedQty + "' but got: '" + actualQuantity + "'");
         logStep("✓ Quantity: " + actualQuantity);
 
         // Unit Price
+        String expectedPrice = TestDataReader.getProductPrice();
         WebElement cartUnitPrice = waitForPresence(
-                By.xpath("//*[@data-testid='cart-item-lenovo-thinkpad-x1-carbon-price']")
+                By.xpath("//*[@data-testid='cart-item-" + itemTestId + "-price']")
         );
         String actualUnitPrice = getJsText(cartUnitPrice);
-        assertEquals(ConfigReader.getProductPrice(), actualUnitPrice,
-                "Unit price should be '" + ConfigReader.getProductPrice() + "' but got: '" + actualUnitPrice + "'");
+        assertEquals(expectedPrice, actualUnitPrice,
+                "Unit price should be '" + expectedPrice + "' but got: '" + actualUnitPrice + "'");
         logStep("✓ Unit Price: " + actualUnitPrice);
 
         // Subtotal
+        String expectedSubtotal = TestDataReader.getProductSubtotal();
         WebElement cartSubtotal = waitForPresence(
-                By.xpath("//*[@data-testid='cart-item-lenovo-thinkpad-x1-carbon-subtotal']")
+                By.xpath("//*[@data-testid='cart-item-" + itemTestId + "-subtotal']")
         );
         String actualSubtotal = getJsText(cartSubtotal);
-        assertEquals(ConfigReader.getProductSubtotal(), actualSubtotal,
-                "Subtotal should be '" + ConfigReader.getProductSubtotal() + "' but got: '" + actualSubtotal + "'");
+        assertEquals(expectedSubtotal, actualSubtotal,
+                "Subtotal should be '" + expectedSubtotal + "' but got: '" + actualSubtotal + "'");
         logStep("✓ Subtotal: " + actualSubtotal);
 
         // Cart Total
+        String expectedTotal = TestDataReader.getCartTotal();
         WebElement cartTotalElement = waitForPresence(
                 By.xpath("//*[@data-testid='cart-total']")
         );
         String actualTotal = getJsText(cartTotalElement);
-        assertEquals(ConfigReader.getCartTotal(), actualTotal,
-                "Cart total should be '" + ConfigReader.getCartTotal() + "' but got: '" + actualTotal + "'");
+        assertEquals(expectedTotal, actualTotal,
+                "Cart total should be '" + expectedTotal + "' but got: '" + actualTotal + "'");
         logStep("✓ Cart Total: " + actualTotal);
 
         logStep("✓ Cart contents verified");
 
         // 📸 Checkpoint 5 — Cart contents verified
-        takeStepScreenshot("05_Cart_Contents_Verified");
+        takeStepScreenshot("06_Cart_Contents_Verified");
     }
 
     public void clickCheckout() {

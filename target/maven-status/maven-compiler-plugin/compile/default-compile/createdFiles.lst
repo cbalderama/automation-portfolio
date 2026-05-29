@@ -10,3 +10,4 @@ com\qa\automation\reports\ExtentReportManager.class
 com\qa\automation\pages\BasePage.class
 com\qa\automation\pages\CartPage.class
 com\qa\automation\utils\ConfigReader.class
+com\qa\automation\helpers\TestDataReader.class

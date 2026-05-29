@@ -3,6 +3,7 @@ package com.qa.automation.tests;
 import com.aventstack.extentreports.ExtentTest;
 import com.aventstack.extentreports.Status;
 import com.qa.automation.helpers.ScreenshotUtils;
+import com.qa.automation.helpers.TestDataReader;
 import com.qa.automation.listeners.TestListener;
 import com.qa.automation.pages.CartPage;
 import com.qa.automation.pages.LoginPage;
@@ -69,9 +70,7 @@ public class CartHappyPathTest {
                 }
             }
 
-            // Save ONE file to disk — named by test result
-            boolean testPassed = testInfo.getDisplayName() != null
-                    && !testInfo.getTags().isEmpty();
+            // Save ONE file to disk
             ScreenshotUtils.takeScreenshot(driver,
                     "FINAL_" + testInfo.getDisplayName().replace("()", ""));
         }
@@ -104,16 +103,16 @@ public class CartHappyPathTest {
         logStep("Step 1: Verify product catalog loaded...");
         catalogPage.verifyCatalogLoaded();
 
-        logStep("Step 2: Click product '" + ConfigReader.getProductName() + "'...");
+        logStep("Step 2: Click product '" + TestDataReader.getProductName() + "'...");
         catalogPage.clickProduct();
 
         logStep("Step 3: Verify product detail page opens with full information...");
         detailPage.verifyProductDetails();
 
-        logStep("Step 4: Set quantity to " + ConfigReader.getProductQuantity() + "...");
+        logStep("Step 4: Set quantity to " + TestDataReader.getProductQuantity() + "...");
         detailPage.incrementQuantity();
 
-        logStep("Step 5: Verify quantity field updates to show '" + ConfigReader.getProductQuantity() + "'...");
+        logStep("Step 5: Verify quantity field updates to show '" + TestDataReader.getProductQuantity() + "'...");
         detailPage.verifyQuantityUpdated();
 
         logStep("Step 6: Click Add to Cart...");
